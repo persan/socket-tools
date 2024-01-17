@@ -5,6 +5,8 @@ with GNAT.Sockets;
 with GNAT.Source_Info;
 with GNAT.Formatted_String;
 with Socket_Tools;
+with Stream_Tools.Memory_Streams;
+
 procedure Main is
    package Listners is
       type Pasive_Listner is new Socket_Tools.Socket_Listner with null record;
@@ -35,11 +37,17 @@ procedure Main is
                                     Socket : GNAT.Sockets.Socket_Type;
                                     Item   : Ada.Streams.Stream_Element_Array;
                                     From   : GNAT.Sockets.Sock_Addr_Type) is
+         Buffer : aliased Stream_Tools.Memory_Streams.Memory_Stream;
+
       begin
+         Buffer.Set_Address (Item'Address);
+         Buffer.Set_Length (Item'Length);
+
          Put_Line (GNAT.Source_Info.Enclosing_Entity &
                      "( Socket =>" & Socket'Image &
                      ", Item => " & Item'Image &
                      ", From => " & From'Image);
+
       end;
       overriding procedure On_Stop (Self   : Pasive_Listner) is
       begin

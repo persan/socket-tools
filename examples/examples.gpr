@@ -1,3 +1,4 @@
+with "stream_tools.gpr";
 with "../socket_tools.gpr";
 
 project Examples is
